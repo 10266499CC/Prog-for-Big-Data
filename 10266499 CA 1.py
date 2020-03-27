@@ -48,3 +48,39 @@ soup = BeautifulSoup(response.content, 'html.parser')
 
 print(soup.prettify())
 
+# Located all of the 'td' tags 
+
+cells = soup.find_all('td')
+
+# Printed out all the cells
+
+for cell in cells:
+    print(cell.string)
+    
+# Located all of the 'td' tags 
+
+cells = soup.find_all('td')
+
+# Printed out all the cells
+
+for cell in cells:
+    print(cell.string)
+
+# Add the headers for the .csv file
+    
+print('Film,Year,Awards,Nominations', end = '')
+
+# Transformed the parsed data to a .csv file
+
+cells = soup.find_all('td')
+for cell in cells:
+    for content in cell.contents:
+        value = str(content).strip().replace('\n', '')
+        if len(value) == 0:
+            print('"0"', end=',')
+        elif value[0].lower() in 'abcdefghijklmnopqrstuvwxyz<':
+            print('\n' + value, end=',')
+        else:
+            print('"' + value + '"', end=',')
+
+ # convert .py file to a .cvs file using the windows command prompter. 
