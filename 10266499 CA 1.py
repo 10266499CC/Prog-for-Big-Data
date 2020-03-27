@@ -30,5 +30,21 @@ headers = {
 
 response = requests.get('https://en.wikipedia.org/wiki/List_of_Academy_Award-winning_films', headers=headers)
 
+# Printed out the contents to the screen 
 
+print(response.content)
+
+# Consulted https://www.crummy.com/software/BeautifulSoup/bs4/doc/ to retrieve the Beautiful Soup code. 
+
+# Imported Beautiful Soup
+
+from bs4 import BeautifulSoup
+
+# Changed the response.content to a Beautiful Soup Object
+
+soup = BeautifulSoup(response.content, 'html.parser')
+
+# Beautiful Soup formatted the html nicely
+
+print(soup.prettify())
 
