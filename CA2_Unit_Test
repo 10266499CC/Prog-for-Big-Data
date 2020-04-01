@@ -1,0 +1,47 @@
+import unittest
+
+from car import Car
+
+# Darren's unit tests
+class TestCar(unittest.TestCase):
+
+    def setUp(self):
+        self.car = Car()
+
+    def test_car_mileage(self):
+        self.assertEqual(0, self.car.getMileage())
+        self.car.move(15)
+        self.assertEqual(15, self.car.getMileage())
+
+    def test_car_make(self):
+        self.assertEqual('', self.car.getMake())
+        self.car.setMake('Ferrari')
+        self.assertEqual('Ferrari', self.car.getMake())
+
+    def test_car_colour(self):
+        self.assertEqual('', self.car.getColour())
+        self.car.paint('red')
+        self.assertEqual('red', self.car.getColour())
+
+# My unit tests 
+        
+    def test_car_vehicle_ID(self):
+        self.assertEqual('', self.car.getVehicle_ID())
+        self.car.setVehicle_ID('pc3')
+        self.assertEqual('pc3', self.car.getVehicle_ID())
+    
+    def test_car_engine_size(self):
+        self.assertEqual('', self.car.getEngine_Size())
+        self.car.setEngine_Size('1.4')
+        self.assertEqual('1.4', self.car.getEngine_Size())
+        
+    def test_Number_Fuel_Cells(self):
+        self.assertEqual('', self.car.getNumber_Fuel_Cells())
+        self.car.setNumber_Fuel_Cells('50')
+        self.assertEqual('50', self.car.getNumber_Fuel_Cells())
+
+
+if __name__ == '__main__':
+    unittest.main()
+
+
