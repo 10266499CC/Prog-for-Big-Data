@@ -1,0 +1,47 @@
+# This is the reservation class
+
+class Reservation(object):
+
+    def __init__(self, customer_name, reservation_number, start_date, end_date, vehicle_ID, number_of_vehicles):
+        self.customer_name= customer_name
+        self.reservation_number = reservation_number
+        self.start_date = start_date
+        self.end_date = end_date
+        self.vehicle_ID = vehicle_ID
+        self.number_of_vehicles = number_of_vehicles
+        
+    def __str__(self):
+        return "Customer Name: {}\n Reservation number: {}\n Start date: {}\n End date: {}\n Vehicle ID: {}\n Number of vehicles: {}\n".format(self.customer_name, self.reservation_number,  self.start_date, self.end_date,  self.vehicle_ID, self.number_of_vehicles)
+
+    def get_Customer_Name(self):
+        return self.customer_name
+    
+    def get_Reservation_number(self):
+        return self.reservation_number
+
+    def get_Start_date(self):
+        return self.start_date
+    
+    def get_End_date(self):
+        return self.end_date
+
+    def get_Vehicle_ID(self):
+        return self.vehicle_ID
+    
+    def get_Number_of_vehicles(self):
+        return self.number_of_vehicles
+
+    def set_Customer_Name(self, customer_name):
+        self.__customer_name = customer_name
+        
+    def set_Reservation_number(self, reservation_number):
+        self.__reservation_number = reservation_number
+        
+    def set_Start_date(self, start_date):
+        self.__start_date = start_date
+
+    def set_End_date(self, end_date):
+        self.__end_date = end_date
+    
+    def set_Vehicle_ID(self, vehicle_ID):
+        self.__vehicle_ID = vehicle_ID
