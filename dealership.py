@@ -1,6 +1,5 @@
-
 from car import Car, ElectricCar, PetrolCar, DieselCar, HybridCar
-
+from csv import writer
 
 class Dealership(object):
 
@@ -37,25 +36,33 @@ class Dealership(object):
 
     def process_rental(self):
         # Display the welcome message to users
-        print('#' * 35)
-        print('WELCOME TO THE DBS CAR RENTAL SYSTEM')
-        print('#' * 35)
+            print('WELCOME TO THE DBS CAR RENTAL SYSTEM')
         # Receive input from customers
-        answer = input('Would you like to rent a car? Yes/No')
+            answer = input('Would you like to rent a car? Yes/No')
         if answer == 'Yes':
             answer = input('Enter car type: Petrol/Diesel/Electric/Hybrid')
-            amount = int(input('how many would you like?'))
-            if answer == 'Petrol':
-                self.rent(self.petrol_cars, amount)
-            elif answer == 'Diesel':
-                self.rent(self.diesel_cars, amount)
-            elif answer == 'Electric':
-                self.rent(self.electric_cars, amount)
-            elif answer == 'Hybrid':
-                self.rent(self.hybrid_cars, amount)
-            else:
-                print('Order not recognised. Please try again.')
-        self.stock_count()
+            answer = int(input('how many would you like?'))
+        if answer == 'Petrol':
+            self.rent(self.petrol_cars, amount)
+        elif answer == 'Diesel':
+            self.rent(self.diesel_cars, amount)
+        elif answer == 'Electric':
+            self.rent(self.electric_cars, amount)
+        elif answer == 'Hybrid':
+            self.rent(self.hybrid_cars, amount)
+        else:
+            print('Order not recognised. Please try again.')
+            self.stock_count()
+  
+    def save_cvs(self, new_res):
+        csv_file = open(r"C:/Users/Desktop/DBS_Rental.csv", "a+")
+           	vehicle_ID= new_res.get_vehicle_ID()
+            colour = new_res.get_colour()
+            model = new_res.get_model()
+            mileage = new_res.get_mileage()
+            Engine_Size = new_res.get_engine_size()
+            Number_Fuel_Cells = new_res.get_number_fuel_cells()
+            reservations_file.write("\n{},{},{},{},{},{},{}".format(vehicle_ID, colour, model, mileage,  engine_size, number_fuel_cells))
 
 dealership = Dealership()
 dealership.create_current_stock()
@@ -63,4 +70,3 @@ proceed = 'Yes'
 while proceed == 'Yes':
     dealership.process_rental()
     proceed = input('Continue? Yes/No')
-
