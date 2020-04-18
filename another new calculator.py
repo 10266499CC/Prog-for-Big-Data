@@ -8,11 +8,11 @@ import sys
 import operator
 from functools import reduce
 
-def main():
+def menu():
     print("************MAIN MENU**************")
     #time.sleep(1)
     print()
-
+while True:
     choice = input("""
                       Welcome to the DBS 10 Functional Calculator with Map Reduce Filter
                       & Generator
@@ -31,7 +31,7 @@ def main():
                       11: Quit
 
                       Please enter your choice: """)
-
+    
     if choice == "1":
          add()
     elif choice == "2":
@@ -57,58 +57,50 @@ def main():
     else:
         print("Please try again")
 
-main()
+menu()
 
 class Calculator(object):
     
-    def add(x, y):
-        print(lambda x, y : x + y)
+    def add(num1, num2):
+        num1= int(input('Enter the first number'))
+        num2= int(input('Enter the second number'))
+        add= lambda x,y: x + y
+        print(add(num1, num2))
    
-    def sqr_num_seq():
-        n = int(input("Enter the size of list : "))
+    def sqr_num_seq(userlist):
         userlist = list(map(int, input("Enter the list numbers separated by space : ").strip().split()))[:n]
         print("User List: ", userlist)
         for x in userlist:
             filtered_result = map (lambda x: x*x, userlist) 
             print(list(filtered_result))
            
-    def odd_nums():
-        n = int(input("Enter the size of list : "))
+    def odd_nums(userlist):
         userlist = list(map(int, input("Enter the list numbers separated by space : ").strip().split()))[:n]
         print("User List: ", userlist)
         for x in userlist:
             odd_num = list(filter(lambda x: x%2!=0 , userlist))
             print(odd_num)
     
-    def sum_of_nums():
-        n = int(input("Enter the size of list : "))
+    def sum_of_nums(userlist): 
         userlist = list(map(int, input("Enter the list numbers separated by space : ").strip().split()))[:n]
         print("User List: ", userlist)
         for x in userlist:
             print ("The sum of the list elements is : ",end="")
             print (functools.reduce(operator.add,num_list))
             
-    def convert_f_to_c():
+    def convert_f_to_c(x):
          x = float(input("Enter the temperature you want to convert : "))
          fahrenheit = map(lambda x: (float(9)/5)*x + 32)
          print(fahrenheit)
     
-    def find_num():
+    def find_num(x,y):
         x = int(input("Enter first number:"))
         y = int(input("Enter first number:"))
         d = reduce(lambda x,y: x+y,map(lambda x:x+x,filter(lambda x: (x>=3), (1,2,3,4)))
         print(d)
+                   
     
-    def sqr_even_num():
-        n = int(input("Enter the size of list : "))
-        userlist = list(map(int, input("Enter the list numbers separated by space : ").strip().split()))[:n]
-        print("User List: ", userlist)
-        for x in userList:
-            sq_list = [x*x for x in userlist if x%2==0]
-            print(sq_list)
-    
-    def sqr_even_num():
-        n = int(input("Enter the size of list : "))
+    def sqr_even_num(userlist):
         userlist = list(map(int, input("Enter the list numbers separated by space : ").strip().split()))[:n]
         print("User List: ", userlist)
         for x in userList:
@@ -159,6 +151,10 @@ class Calculator(object):
                             for ele in find_prime():
                                 print(ele)
 
+
+                                
+
+    
 
     
     
