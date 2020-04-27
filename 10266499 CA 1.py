@@ -1,86 +1,80 @@
 # -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
-# This a list of all of the Oscar winning movies, from 1927 to 2019 inclusive.  
-# It was taken from https://en.wikipedia.org/wiki/List_of_Academy_Award-winning_films
-
-# Converted the cURL command to python code using https://curl.trillworks.com/
-# The code below contains the python code from https://curl.trillworks.com/
-
-import requests
-
-headers = {
-    'authority': 'en.wikipedia.org',
-    'cache-control': 'max-age=0',
-    'upgrade-insecure-requests': '1',
-    'user-agent': 'Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
-    'sec-fetch-dest': 'document',
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'sec-fetch-site': 'cross-site',
-    'sec-fetch-mode': 'navigate',
-    'sec-fetch-user': '?1',
-    'referer': 'https://www.google.com/',
-    'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
-    'cookie': 'WMF-Last-Access=27-Mar-2020; WMF-Last-Access-Global=27-Mar-2020; GeoIP=IE:L:Athlone:53.42:-7.94:v4; enwikimwuser-sessionId=1ecc224ef612e566c51c',
-    'if-modified-since': 'Tue, 17 Mar 2020 01:16:16 GMT',
-}
-
-response = requests.get('https://en.wikipedia.org/wiki/List_of_Academy_Award-winning_films', headers=headers)
-
-# Printed out the contents to the screen 
-
-print(response.content)
-
-# Consulted https://www.crummy.com/software/BeautifulSoup/bs4/doc/ to retrieve the Beautiful Soup code. 
+#### Scrape the best selling books on Amazon.com #####
 
 # Imported Beautiful Soup
 
 from bs4 import BeautifulSoup
 
-# Changed the response.content to a Beautiful Soup Object
+# Import the other libraries
 
-soup = BeautifulSoup(response.content, 'html.parser')
+import pandas as pd
+from bs4 import BeautifulSoup
+import requests
 
-# Beautiful Soup formatted the html nicely
+no_pages = 2
 
-print(soup.prettify())
+def get_data(pageNo):  
+    headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0", "Accept-Encoding":"gzip, deflate", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "DNT":"1","Connection":"close", "Upgrade-Insecure-Requests":"1"}
 
-# Located all of the 'td' tags 
+    r = requests.get('https://www.amazon.in/gp/bestsellers/books/ref=zg_bs_pg_'+str(pageNo)+'?ie=UTF8&pg='+str(pageNo), headers=headers)#, proxies=proxies)
+    content = r.content
+    soup = BeautifulSoup(content)
+    #print(soup)
 
-cells = soup.find_all('td')
+    alls = []
+    for d in soup.findAll('div', attrs={'class':'a-section a-spacing-none aok-relative'}):
+        #print(d)
+        name = d.find('span', attrs={'class':'zg-text-center-align'})
+        n = name.find_all('img', alt=True)
+        #print(n[0]['alt'])
+        author = d.find('a', attrs={'class':'a-size-small a-link-child'})
+        rating = d.find('span', attrs={'class':'a-icon-alt'})
+        users_rated = d.find('a', attrs={'class':'a-size-small a-link-normal'})
+        price = d.find('span', attrs={'class':'p13n-sc-price'})
 
-# Printed out all the cells
+        all1=[]
 
-for cell in cells:
-    print(cell.string)
-    
-# Located all of the 'td' tags 
-
-cells = soup.find_all('td')
-
-# Printed out all the cells
-
-for cell in cells:
-    print(cell.string)
-
-# Add the headers for the .csv file
-    
-print('Film,Year,Awards,Nominations', end = '')
-
-# Transformed the parsed data to a .csv file
-
-cells = soup.find_all('td')
-for cell in cells:
-    for content in cell.contents:
-        value = str(content).strip().replace('\n', '')
-        if len(value) == 0:
-            print('"0"', end=',')
-        elif value[0].lower() in 'abcdefghijklmnopqrstuvwxyz<':
-            print('\n' + value, end=',')
+        if name is not None:
+            #print(n[0]['alt'])
+            all1.append(n[0]['alt'])
         else:
-            print('"' + value + '"', end=',')
+            all1.append("unknown-product")
 
- # convert .py file to a .cvs file using the windows command prompter. 
+        if author is not None:
+            #print(author.text)
+            all1.append(author.text)
+        elif author is None:
+            author = d.find('span', attrs={'class':'a-size-small a-color-base'})
+            if author is not None:
+                all1.append(author.text)
+            else:    
+                all1.append('0')
+
+        if rating is not None:
+            #print(rating.text)
+            all1.append(rating.text)
+        else:
+            all1.append('-1')
+
+        if users_rated is not None:
+            #print(price.text)
+            all1.append(users_rated.text)
+        else:
+            all1.append('0')     
+
+        if price is not None:
+            #print(price.text)
+            all1.append(price.text)
+        else:
+            all1.append('0')
+        alls.append(all1)    
+    return alls
+
+results = []
+for i in range(1, no_pages+1):
+    results.append(get_data(i))
+flatten = lambda l: [item for sublist in l for item in sublist]
+df = pd.DataFrame(flatten(results),columns=['Book Name','Author','Rating','Customers_Rated', 'Price'])
+df.to_csv('bestsellers.csv', index=False, encoding='utf-8')
+
+df = pd.read_csv("bestsellers.csv")
